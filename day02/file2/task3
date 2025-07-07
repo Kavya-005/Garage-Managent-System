@@ -1,0 +1,49 @@
+#include <iostream>
+#include <fcntl.h>
+#include <unistd.h>
+#include <linux/input.h>
+using namespace std;
+int main()
+{
+	
+	int fd = open( "/dev/input/event1",O_RDONLY );
+	if (fd < 0){
+		perror( "open error");
+		return -1;
+	}
+	while (true)
+       	{
+	
+		struct input_event ev;
+		read(fd, &ev,sizeof(ev));
+	
+		if (ev.type != EV_KEY) {
+			continue;
+		}
+		//volum+
+		if (ev.code == KEY_UP) {
+			
+			if ( ev.value == 1){
+				cout<<"volum+" << endl;
+			}
+			sleep(10);
+		
+			//if ( ev.value == 0) {
+			cout<<"volum+" << endl;
+			//}
+		}
+		//下volum-
+		if (ev.code == KEY_DOWN){
+			
+			if (ev.value == 1){
+				cout <<"volum-" << endl;
+			}
+			sleep(10);
+		
+			//if ( ev.value == 0){
+			cout <<"volum-" << endl;
+			//}	
+		}
+	}
+	return 0;
+}
